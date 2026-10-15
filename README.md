@@ -166,7 +166,7 @@ Set-Service sshd -StartupType Disabled
 - I actually get now how a SIEM works end to end (agent → server → indexer → dashboard), not just the theory of it. And reading an alert properly means actually checking the account, the source, the logon type — not just glancing at the description and moving on.
 - The disk filling up was annoying but honestly the most useful part. 25GB sounds like plenty until you watch it hit 100% in like an hour.
 - NAT vs Bridged, Public vs Private network profiles, these are the kind of settings nobody tells you about until something just... doesn't connect, and you spend way too long figuring out why.
-- Biggest one: logs don't always tell you everything. The Windows event was missing the attacker's IP, but the OpenSSH log had it. Lesson learned — if something's not in one place, check somewhere else first.
+- A good lesson: logs don't always tell you everything. The Windows event was missing the attacker's IP, but the OpenSSH log had it. Lesson learned — if something's not in one place, check somewhere else first.
 
 ## Tools Used
 
