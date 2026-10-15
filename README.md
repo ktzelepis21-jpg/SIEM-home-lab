@@ -1,6 +1,6 @@
 # SIEM Home Lab
 
-A small home lab where I set up Wazuh (an open-source SIEM/XDR platform), connected it to a Windows machine, and simulated both local and network-based failed login attempts to practice detecting and analyzing security events — the kind of work a SOC analyst does day to day.
+A small home lab where I set up Wazuh (an open-source SIEM/XDR platform), connected it to a Windows machine, and simulated both local and network-based failed login attempts to practice detecting and analyzing security events ,which is basically what a SOC analyst spends their day doing.
 
 ## Background
 
@@ -91,7 +91,7 @@ The first test was local (logon type 2, from 127.0.0.1). To see what a *network-
 
 ### Setting up the network
 
-Parrot was initially set to NAT mode in VirtualBox, which gave it an internal-only address (10.0.2.15) that couldn't reach the other machines. I switched it to Bridged mode, the same as the Wazuh server, so it would get a real address on the local network.
+Parrot was initially set to NAT mode in VirtualBox, which gave it an internal-only address (10.0.2.15) that couldn’t talk to the other machines. Switched it to Bridged mode instead, same as the Wazuh server, and it picked up a real address on the network.
 
 ![Parrot set to Bridged mode](screenshots/08-parrot-bridged.png)
 
@@ -148,7 +148,7 @@ Get-WinEvent -LogName "OpenSSH/Operational" -MaxEvents 20
 
 ![OpenSSH log showing Parrot's IP](screenshots/15-openssh-log.png)
 
-This showed exactly what I needed: `sshd: Failed password for User from 192.168.1.13 port 46252 ssh2`, repeated three times, matching the attempts from Parrot. This was a good reminder that a single log source doesn't always have everything — checking the service's own logs filled in the gap that the Windows Security log left blank.
+This showed exactly what I needed: `sshd: Failed password for User from 192.168.1.13 port 46252 ssh2`, repeated three times, matching the attempts from Parrot. Good lesson: dont trust one log source completely, if a field is missing, check somewhere else.
 
 ### Cleaning up
 
@@ -163,10 +163,10 @@ Set-Service sshd -StartupType Disabled
 
 ## What I Learned
 
-- How a SIEM actually works end to end: agent → server → indexer → dashboard, and how to read an alert beyond just its description.
-- The difference between a local and a network-based login attempt, and which fields (`logonType`, `processName`, `ipAddress`) actually tell you that.
-- That logs aren't always complete — when one field was missing, I had another source (the SSH service's own logs) to cross-check.
-- Basic troubleshooting under pressure: disk space issues, VirtualBox networking modes (NAT vs Bridged), and Windows network profiles (Public vs Private) all got in the way at some point, and I had to figure out why.
+- I actually get now how a SIEM works end to end (agent → server → indexer → dashboard), not just the theory of it. And reading an alert properly means actually checking the account, the source, the logon type — not just glancing at the description and moving on.
+- The disk filling up was annoying but honestly the most useful part. 25GB sounds like plenty until you watch it hit 100% in like an hour.
+- NAT vs Bridged, Public vs Private network profiles, these are the kind of settings nobody tells you about until something just... doesn't connect, and you spend way too long figuring out why.
+- Biggest one: logs don't always tell you everything. The Windows event was missing the attacker's IP, but the OpenSSH log had it. Lesson learned — if something's not in one place, check somewhere else first.
 
 ## Tools Used
 
