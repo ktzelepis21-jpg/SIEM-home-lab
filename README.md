@@ -14,7 +14,7 @@ The lab has three machines, all on the same local network:
 - **Windows PC** (192.168.1.3) — my own Windows 11 machine, set up as the monitored endpoint (the "victim").
 - **Parrot OS** (192.168.1.13) — a Linux VM playing the role of the attacker.
 
-All three are on the same network (VirtualBox, Bridged mode), so the Wazuh server sees activity from Parrot the same way it would see traffic from any other device on a real network.
+All three are on the same network (VirtualBox bridged mode), so the Wazuh server sees activity from Parrot the same way it would see traffic from any other device on a real network.
 
 ## Part 1 — Setup & Local Login Testing
 
